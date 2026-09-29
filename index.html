@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f3ee" />
+    <meta
+      name="description"
+      content="A student-built train booking demo made with HTML, CSS, and JavaScript."
+    />
+    <title>railday — Find your next train</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="railday home">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span class="brand-copy"
+          ><strong>railday</strong><small>RAIL JOURNEY PLANNER</small></span
+        >
+      </a>
+      <nav class="primary-nav" aria-label="Main navigation">
+        <button
+          class="nav-link is-active"
+          type="button"
+          data-view="book"
+          aria-current="page"
+        >
+          Find trains
+        </button>
+        <button class="nav-link" type="button" data-view="bookings">
+          My trips <span class="nav-count" id="my-trip-count" hidden>0</span>
+        </button>
+      </nav>
+      <div class="account-mark" aria-label="Guest account">G</div>
+    </header>
+
+    <main id="top">
+      <section
+        class="journey-search"
+        id="journey-search"
+        aria-labelledby="hero-title"
+      >
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="eyebrow-dot"></span> A little more room for the journey
+          </p>
+          <h1 id="hero-title">Go places.<br /><em>Feel at ease.</em></h1>
+          <p class="hero-description">
+            Find a train, choose your seats, and keep your trip details close at
+            hand.
+          </p>
+          <div
+            class="hero-route"
+            aria-label="Illustrative route from Mumbai to Goa"
+          >
+            <span class="route-stop"><i></i><b>Mumbai</b></span>
+            <span class="route-line"><span></span></span>
+            <span class="route-stop"><i></i><b>Goa</b></span>
+            <span class="route-caption">The coast is calling</span>
+          </div>
+        </div>
+
+        <form class="search-card" id="search-form">
+          <div class="search-card-heading">
+            <div>
+              <p class="eyebrow eyebrow-dark">PLAN A RAIL JOURNEY</p>
+              <h2>Where are you headed?</h2>
+            </div>
+            <span class="demo-tag">DEMO</span>
+          </div>
+          <div class="station-fields">
+            <label class="field station-field" for="from-station">
+              <span class="field-label">From</span>
+              <select id="from-station" name="from" required></select>
+            </label>
+            <button
+              class="swap-button"
+              id="swap-stations"
+              type="button"
+              aria-label="Swap departure and arrival stations"
+            >
+              ↕
+            </button>
+            <label class="field station-field" for="to-station">
+              <span class="field-label">To</span>
+              <select id="to-station" name="to" required></select>
+            </label>
+          </div>
+          <div class="search-bottom-fields">
+            <label class="field compact-field" for="travel-date">
+              <span class="field-label">Journey date</span>
+              <input id="travel-date" name="date" type="date" required />
+            </label>
+            <label class="field compact-field" for="passenger-count">
+              <span class="field-label">Travellers</span>
+              <select id="passenger-count" name="passengers">
+                <option value="1">1 traveller</option>
+                <option value="2">2 travellers</option>
+                <option value="3">3 travellers</option>
+                <option value="4">4 travellers</option>
+                <option value="5">5 travellers</option>
+                <option value="6">6 travellers</option>
+              </select>
+            </label>
+          </div>
+          <button class="primary-button search-button" type="submit">
+            <span>Search trains</span><span aria-hidden="true">→</span>
+          </button>
+          <p class="form-footnote">
+            <span aria-hidden="true">ⓘ</span> Sample schedules and fares for
+            learning purposes
+          </p>
+        </form>
+      </section>
+
+      <section
+        class="results-section page-section"
+        id="results-section"
+        aria-labelledby="results-title"
+        hidden
+      >
+        <div class="section-heading results-heading">
+          <div>
+            <p class="eyebrow eyebrow-dark">YOUR JOURNEY</p>
+            <h2 id="results-title">Available trains</h2>
+            <p class="section-description" id="results-summary"></p>
+          </div>
+          <div class="results-controls">
+            <label class="sort-control" for="sort-trains"
+              ><span>Sort by</span>
+              <select id="sort-trains" aria-label="Sort trains">
+                <option value="departure">Departure</option>
+                <option value="price">Lowest fare</option>
+                <option value="duration">Shortest journey</option>
+              </select>
+            </label>
+            <label class="sort-control" for="class-filter"
+              ><span>Class</span>
+              <select id="class-filter" aria-label="Filter by travel class">
+                <option value="all">All classes</option>
+                <option value="AC 2 Tier">AC 2 Tier</option>
+                <option value="AC 3 Tier">AC 3 Tier</option>
+                <option value="Sleeper">Sleeper</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <p
+          class="live-message"
+          id="results-message"
+          role="status"
+          aria-live="polite"
+        ></p>
+        <div class="train-list" id="train-list"></div>
+      </section>
+
+      <section
+        class="booking-section page-section"
+        id="booking-flow"
+        aria-labelledby="booking-title"
+        hidden
+      ></section>
+
+      <section
+        class="bookings-page page-section"
+        id="bookings-page"
+        aria-labelledby="bookings-title"
+        hidden
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow eyebrow-dark">YOUR SAVED JOURNEYS</p>
+            <h2 id="bookings-title">My trips</h2>
+            <p class="section-description">
+              Demo bookings saved in this browser.
+            </p>
+          </div>
+        </div>
+        <div id="saved-bookings" class="saved-bookings"></div>
+      </section>
+
+      <section class="closing-note" aria-label="Project scope">
+        <span class="closing-icon" aria-hidden="true">✳</span>
+        <p>
+          <strong>A front-end learning project.</strong> Tickets are not issued
+          and no railway service is contacted.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="footer-brand" href="#top"
+        >railday<span> · </span>Travel, thoughtfully.</a
+      >
+      <p>Built with HTML, CSS &amp; JavaScript</p>
+      <a href="#top" class="back-to-top">Back to top ↑</a>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>
